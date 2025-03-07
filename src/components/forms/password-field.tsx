@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Field, ErrorMessage } from "formik";
+import { Field, ErrorMessage, FieldProps } from "formik";
 import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, Input, Label } from "../ui";
@@ -49,7 +49,7 @@ export function PasswordField({
 
       <div className="relative">
         <Field name={name}>
-          {({ field, meta }: any) => (
+          {({ field, meta }: FieldProps) => (
             <Input
               id={id}
               type={showPassword ? "text" : "password"}

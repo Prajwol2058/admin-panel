@@ -6,6 +6,7 @@ import { useState, useRef, type ChangeEvent } from "react";
 import { Camera, Upload, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui";
+import Image from "next/image";
 
 interface PhotoUploadProps {
   value: string;
@@ -64,10 +65,12 @@ export function PhotoUpload({ value, onChange, className }: PhotoUploadProps) {
           )}
         >
           {value ? (
-            <img
+            <Image
               src={value || "/placeholder.svg"}
               alt="Profile"
               className="h-full w-full object-cover"
+              width={100}
+              height={100}
             />
           ) : (
             <Camera className="h-10 w-10 text-muted-foreground" />

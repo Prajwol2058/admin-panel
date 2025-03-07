@@ -1,5 +1,5 @@
 import type React from "react";
-import { Field, ErrorMessage } from "formik";
+import { Field, ErrorMessage, FieldProps } from "formik";
 import { cn } from "@/lib/utils";
 import { Input, Label } from "../ui";
 
@@ -48,7 +48,7 @@ export function FormField({
 
       {children || (
         <Field name={name}>
-          {({ field, meta }: any) => (
+          {({ field, meta }: FieldProps) => (
             <Input
               id={id}
               type={type}

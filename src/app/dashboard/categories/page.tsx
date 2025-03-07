@@ -11,7 +11,6 @@ import {
   categorySchema,
 } from "@/lib/validation/category-schema";
 import { Category } from "@/types/category-types";
-import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -66,12 +65,14 @@ export default function CategoriesPage() {
           setIsLoading(false);
         }, 1000);
       } catch (error) {
+        console.log(error);
+
         setIsLoading(false);
       }
     };
 
     fetchCategories();
-  }, [toast]);
+  }, []);
 
   // Filter categories based on search query
   const filteredCategories = categories.filter((category) =>
@@ -84,7 +85,11 @@ export default function CategoriesPage() {
     { resetForm }: { resetForm: () => void }
   ) => {
     try {
-    } catch (error) {}
+      console.log(values);
+      console.log(resetForm);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Handle update category
@@ -93,10 +98,13 @@ export default function CategoriesPage() {
     { resetForm }: { resetForm: () => void }
   ) => {
     if (!editCategory) return;
+    console.log(resetForm);
 
     try {
       console.log(values);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // Handle delete category
@@ -105,7 +113,9 @@ export default function CategoriesPage() {
 
     try {
       console.log(deleteId);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
