@@ -70,15 +70,13 @@ export function LoginForm() {
                 required
               />
 
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <PasswordField
-                    id="password"
-                    name="password"
-                    label="Password"
-                    required
-                  />
-                </div>
+              <div className="space-y-4 mb-6">
+                <PasswordField
+                  id="password"
+                  name="password"
+                  label="Password"
+                  required
+                />
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
