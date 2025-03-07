@@ -54,7 +54,6 @@ import {
 } from "@/lib/validation/category-schema";
 import { toast } from "sonner";
 import { Category } from "@/types/category-types";
-import { log } from "console";
 
 // Mock data for categories
 const mockCategories = [
@@ -127,7 +126,7 @@ export default function CategoriesPage() {
     if (!editCategory) return;
 
     try {
-      log(editCategory);
+      console.log(values);
     } catch (error) {}
   };
 
@@ -136,7 +135,7 @@ export default function CategoriesPage() {
     if (deleteId === null) return;
 
     try {
-      log(deleteId);
+      console.log(deleteId);
     } catch (error) {}
   };
 
