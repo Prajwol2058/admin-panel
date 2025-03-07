@@ -2,10 +2,8 @@
 
 import type React from "react";
 import Link from "next/link";
-import { MobileNav } from "@/components/dashboard/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { NavLinks } from "@/components/dashboard/nav-links";
-import { UserNav } from "@/components/dashboard/user-nav";
+import { MobileNav, NavLinks, UserNav } from "@/components/dashboard";
 
 export default function DashboardLayout({
   children,

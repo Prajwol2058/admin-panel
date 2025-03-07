@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Formik, Form } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
+import { LoginFormValues, loginSchema } from "@/lib/validation/auth-schemas";
 import {
   Card,
   CardContent,
@@ -12,12 +13,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-
-import { FormField } from "../forms/form-field";
-import { PasswordField } from "../forms/password-field";
-import { FormSubmit } from "../forms/form-submit";
-import { LoginFormValues, loginSchema } from "@/lib/validation/auth-schemas";
+  FormField,
+  FormSubmit,
+  PasswordField,
+} from "..";
 
 export function LoginForm() {
   const router = useRouter();

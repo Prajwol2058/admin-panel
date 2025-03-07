@@ -3,10 +3,8 @@
 import { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { Eye, EyeOff } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button, Input, Label } from "../ui";
 
 interface PasswordFieldProps {
   id: string;

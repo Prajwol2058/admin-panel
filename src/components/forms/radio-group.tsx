@@ -1,9 +1,8 @@
 "use client";
 
 import { Field, ErrorMessage } from "formik";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
+import { Label, RadioGroup, RadioGroupItem } from "../ui";
 
 interface Option {
   value: string;
