@@ -1,42 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Edit, Loader2, MoreHorizontal, Plus, Trash } from "lucide-react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useEffect, useState } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-import { Button } from "@/components/ui/button";
+import { mockCategories } from "@/components/mockdata/mockdata";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  CategoryFormValues,
+  categorySchema,
+} from "@/lib/validation/category-schema";
+import { Category } from "@/types/category-types";
+import { toast } from "sonner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,15 +21,32 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Label } from "@/components/ui/label";
-import {
-  CategoryFormValues,
-  categorySchema,
-} from "@/lib/validation/category-schema";
-import { toast } from "sonner";
-import { Category } from "@/types/category-types";
-import { mockCategories } from "@/components/mockdata/mockdata";
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  Input,
+  Label,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
