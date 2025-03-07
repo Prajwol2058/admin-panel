@@ -6,24 +6,24 @@ import { Formik, Form } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 import {
+  registerSchema,
+  type RegisterFormValues,
+} from "@/lib/validation/auth-schemas";
+import { Separator } from "@/components/ui/separator";
+import { RadioGroupField } from "../forms/radio-group";
+import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { FormField } from "@/components/forms/form-field";
-import { PasswordField } from "@/components/forms/password-field";
-import { SelectField } from "@/components/forms/select-field";
-import { PhotoUpload } from "@/components/forms/photo-upload";
-import { FormSubmit } from "@/components/forms/form-submit";
-import {
-  registerSchema,
-  type RegisterFormValues,
-} from "@/lib/validation/auth-schemas";
-import { Separator } from "@/components/ui/separator";
-import { RadioGroupField } from "../forms/radio-group";
+  FormField,
+  FormSubmit,
+  PasswordField,
+  PhotoUpload,
+  SelectField,
+} from "..";
 
 export function RegisterForm() {
   const router = useRouter();

@@ -4,8 +4,8 @@ import type React from "react";
 
 import { useState, useRef, type ChangeEvent } from "react";
 import { Camera, Upload, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button } from "../ui";
 
 interface PhotoUploadProps {
   value: string;

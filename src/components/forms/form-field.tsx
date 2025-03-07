@@ -1,8 +1,7 @@
 import type React from "react";
 import { Field, ErrorMessage } from "formik";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { Input, Label } from "../ui";
 
 interface FormFieldProps {
   id: string;

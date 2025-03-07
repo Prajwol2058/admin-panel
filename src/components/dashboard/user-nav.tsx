@@ -1,7 +1,7 @@
 "use client";
 
 import { LogOut, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui";
 
 export function UserNav() {
   return (

@@ -1,15 +1,16 @@
 "use client";
 
 import { Field, ErrorMessage } from "formik";
-import { Label } from "@/components/ui/label";
+
+import { cn } from "@/lib/utils";
 import {
+  Label,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+} from "../ui";
 
 interface Option {
   value: string;
