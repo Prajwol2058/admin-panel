@@ -90,7 +90,7 @@ export const ContentModal = ({
         onSubmit={editContent ? handleUpdateContent : handleCreateContent}
         enableReinitialize
       >
-        {({ isSubmitting, errors, touched, values, setFieldValue }) => (
+        {({ isSubmitting, errors, touched, setFieldValue }) => (
           <Form className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">

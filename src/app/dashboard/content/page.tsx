@@ -77,6 +77,8 @@ export default function ContentPage() {
           setIsLoading(false);
         }, 1000);
       } catch (error) {
+        console.log(error);
+
         setIsLoading(false);
       }
     };
