@@ -1,6 +1,6 @@
 "use client";
 import type React from "react";
-import { Form, Formik, Field, ErrorMessage } from "formik";
+import { Form, Formik, Field, ErrorMessage, FieldProps } from "formik";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import * as z from "zod";
@@ -178,7 +178,7 @@ export const ContentModal = ({
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
                 <Field name="category">
-                  {({ field, form }: any) => (
+                  {({ field, form }: FieldProps) => (
                     <Select
                       value={field.value}
                       onValueChange={(value) =>

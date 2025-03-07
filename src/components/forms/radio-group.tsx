@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, ErrorMessage } from "formik";
+import { Field, ErrorMessage, FieldProps } from "formik";
 import { cn } from "@/lib/utils";
 import { Label, RadioGroup, RadioGroupItem } from "../ui";
 
@@ -47,7 +47,7 @@ export function RadioGroupField({
       </div>
 
       <Field name={name}>
-        {({ field, form }: any) => (
+        {({ field, form }: FieldProps) => (
           <RadioGroup
             defaultValue={field.value}
             onValueChange={(value) => form.setFieldValue(name, value)}

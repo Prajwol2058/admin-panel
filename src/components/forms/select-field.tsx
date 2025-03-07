@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, ErrorMessage } from "formik";
+import { Field, ErrorMessage, FieldProps } from "formik";
 
 import { cn } from "@/lib/utils";
 import {
@@ -57,7 +57,7 @@ export function SelectField({
       </div>
 
       <Field name={name}>
-        {({ field, form, meta }: any) => (
+        {({ field, form, meta }: FieldProps) => (
           <Select
             defaultValue={field.value}
             onValueChange={(value) => form.setFieldValue(name, value)}
