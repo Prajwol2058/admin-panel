@@ -19,13 +19,13 @@ export const registerSchema = z
             .string()
             .min(6, "Password must be at least 6 characters")
             .max(100, "Password cannot exceed 100 characters"),
-        confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+        confirm_password: z.string().min(6, "Password must be at least 6 characters"),
         gender: z.enum(["MALE", "FEMALE", "PREFERNOTTOSAY"]),
         role: z.enum(["USER", "ADMIN"]),
     })
-    .refine((data) => data.password === data.confirmPassword, {
+    .refine((data) => data.password === data.confirm_password, {
         message: "Passwords don't match",
-        path: ["confirmPassword"],
+        path: ["confirm_password"],
     })
 
 export type RegisterFormValues = z.infer<typeof registerSchema>

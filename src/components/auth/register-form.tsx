@@ -24,39 +24,30 @@ import {
   PhotoUpload,
   SelectField,
 } from "..";
+import { useAuth } from "../hooks/use-auth";
+import { genderOptions, roleOptions } from "../constants/roles";
 
 export function RegisterForm() {
   const router = useRouter();
+  const { register } = useAuth();
 
   const initialValues: RegisterFormValues = {
     name: "",
     username: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirm_password: "",
     gender: "MALE",
     role: "USER",
     photo: "",
   };
-
-  const genderOptions = [
-    { value: "MALE", label: "Male" },
-    { value: "FEMALE", label: "Female" },
-    { value: "PREFERNOTTOSAY", label: "Prefer not to say" },
-  ];
-
-  const roleOptions = [
-    { value: "USER", label: "User" },
-    { value: "ADMIN", label: "Editor" },
-  ];
 
   const handleSubmit = async (
     values: RegisterFormValues,
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      console.log(values);
-
+      register(values);
       setTimeout(() => {
         router.push("/login");
       }, 1000);
@@ -129,8 +120,8 @@ export function RegisterForm() {
                   />
 
                   <PasswordField
-                    id="confirmPassword"
-                    name="confirmPassword"
+                    id="confirm_password"
+                    name="confirm_password"
                     label="Confirm Password"
                     required
                   />

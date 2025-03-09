@@ -65,7 +65,7 @@ export function useAuth() {
     const register = useCallback(async (data: RegisterDataTypes) => {
         setIsLoading(true)
         try {
-            // Use the auth service to register
+
             const response = await authService.register(data)
 
             toast.success("Registration successful", {
