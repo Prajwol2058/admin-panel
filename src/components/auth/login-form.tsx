@@ -17,9 +17,11 @@ import {
   FormSubmit,
   PasswordField,
 } from "..";
+import { useAuth } from "../hooks/use-auth";
 
 export function LoginForm() {
   const router = useRouter();
+  const { login } = useAuth();
 
   const initialValues: LoginFormValues = {
     email: "",
@@ -31,7 +33,7 @@ export function LoginForm() {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      console.log(values);
+      login(values);
 
       // Redirect to dashboard
       setTimeout(() => {
