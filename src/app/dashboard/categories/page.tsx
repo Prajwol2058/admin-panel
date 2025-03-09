@@ -5,12 +5,6 @@ import { Edit, Loader2, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
-import { mockCategories } from "@/components/mockdata/mockdata";
-import {
-  CategoryFormValues,
-  categorySchema,
-} from "@/lib/validation/category-schema";
-import { Category } from "@/types/category-types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -46,38 +40,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components";
+import categoryService from "@/lib/api/category-service";
+import {
+  CategoryFormValues,
+  categorySchema,
+} from "@/lib/validation/category-schema";
+import {
+  CategoriesResponse,
+  Category,
+  EditCategoryTypes,
+} from "@/types/category-types";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [editCategory, setEditCategory] = useState<Category | null>(null);
+  const [editCategory, setEditCategory] = useState<EditCategoryTypes | null>(
+    null
+  );
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        // Using mock data for now
-        setTimeout(() => {
-          setCategories(mockCategories);
-          setIsLoading(false);
-        }, 1000);
-      } catch (error) {
-        console.log(error);
-
-        setIsLoading(false);
-      }
-    };
-
     fetchCategories();
   }, []);
 
-  // Filter categories based on search query
-  const filteredCategories = categories.filter((category) =>
-    category.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const fetchCategories = async () => {
+    try {
+      setIsLoading(true);
+      const data: CategoriesResponse = await categoryService.getAll();
+      setCategories(data.responseObject.categories);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Handle create category
   const handleCreateCategory = async (
@@ -85,8 +83,10 @@ export default function CategoriesPage() {
     { resetForm }: { resetForm: () => void }
   ) => {
     try {
-      console.log(values);
-      console.log(resetForm);
+      await categoryService.create(values);
+      fetchCategories();
+      resetForm();
+      setOpenDialog(false);
     } catch (error) {
       console.log(error);
     }
@@ -101,7 +101,10 @@ export default function CategoriesPage() {
     console.log(resetForm);
 
     try {
-      console.log(values);
+      await categoryService.update(editCategory.id, values);
+      setOpenDialog(false);
+      resetForm();
+      fetchCategories();
     } catch (error) {
       console.log(error);
     }
@@ -112,6 +115,9 @@ export default function CategoriesPage() {
     if (deleteId === null) return;
 
     try {
+      await categoryService.delete(deleteId);
+      setOpenDeleteDialog(false);
+      fetchCategories();
       console.log(deleteId);
     } catch (error) {
       console.log(error);
@@ -235,20 +241,20 @@ export default function CategoriesPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCategories.length === 0 ? (
+                {categories?.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={4} className="h-24 text-center">
                       No categories found.
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredCategories.map((category) => (
+                  categories?.map((category) => (
                     <TableRow key={category.id}>
                       <TableCell className="font-medium">
                         {category.name}
                       </TableCell>
-                      <TableCell>{category.createdAt}</TableCell>
-                      <TableCell>{category.updatedAt}</TableCell>
+                      <TableCell>{category.created_at}</TableCell>
+                      <TableCell>{category.updated_at}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
