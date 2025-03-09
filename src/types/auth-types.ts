@@ -9,7 +9,7 @@ export interface RegisterDataTypes {
     email: string
     password: string
     confirm_password: string
-    photo: string
+    photo?: string
     gender: string
 }
 
