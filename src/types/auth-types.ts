@@ -32,6 +32,9 @@ export interface AuthResponseTypes {
 
 
 export interface RefreshTokenResponseTypes {
-    accessToken: string
-    refreshToken?: string
+    responseObject: {
+        token: string
+        refreshToken?: string
+    }
+
 }

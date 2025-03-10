@@ -15,7 +15,7 @@ export class ApiService<T> {
     /**
      * Get all items
      */
-    async getAll(params: QueryParamsTypes): Promise<T[]> {
+    async getAll(params?: QueryParamsTypes): Promise<T[]> {
         try {
             const queryParams = {
                 ...params,
