@@ -5,12 +5,30 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { MobileNav, NavLinks, UserNav } from "@/components/dashboard";
 import { ProtectedRoute } from "@/components/auth/protected-route";
+import { useAuth } from "@/components/hooks/use-auth";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const { user, isLoading } = useAuth();
+
+  // Redirect users to the appropriate dashboard based on their role
+  useEffect(() => {
+    if (!isLoading && user) {
+      // If user is not an admin and tries to access admin pages, redirect to user dashboard
+      if (
+        user.role !== "ADMIN" &&
+        !window.location.pathname.includes("/dashboard/search-content")
+      ) {
+        router.push("/dashboard/search-content");
+      }
+    }
+  }, [isLoading, user, router]);
   return (
     <ProtectedRoute>
       <div className="flex min-h-screen flex-col">
@@ -41,7 +59,7 @@ export default function DashboardLayout({
                 </Link>
               </div>
               <div className="flex-1 overflow-auto p-4">
-                <NavLinks />
+                <NavLinks userRole={user?.role} />
               </div>
               <div className="border-t p-4">
                 <div className="flex items-center justify-between">
