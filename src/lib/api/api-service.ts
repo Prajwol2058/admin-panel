@@ -14,9 +14,11 @@ export class ApiService<T> {
     /**
      * Get all items
      */
-    async getAll(): Promise<T[]> {
+    async getAll(page?: number, limit?: number): Promise<T[]> {
         try {
-            const response = await axiosClient.get<T[]>(this.endpoint)
+            const params = { page, limit };
+
+            const response = await axiosClient.get<T[]>(this.endpoint, { params })
             return response.data
         } catch (error) {
             this.handleError(error, "fetching")
