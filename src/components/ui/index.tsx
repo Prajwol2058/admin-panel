@@ -11,3 +11,4 @@ export * from "./table";
 export * from "./radio-group";
 export * from "./sheet";
 export * from "./table";
+export * from "./textarea";

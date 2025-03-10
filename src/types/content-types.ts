@@ -3,16 +3,23 @@ export interface Content {
     slug: string
     author_id: number
     title: string
+    photo:File | null
     subtitle: string
     content: string
     category: string
-    createdAt: string
+    size: number
+    width: number
+    height:number
+    is_deleted: number
+    created_at: string
+    updated_at: string
   }
   
   export interface CreateContentData {
     slug: string
     author_id: number
     title: string
+    photo:File | null
     subtitle: string
     content: string
     category: string
