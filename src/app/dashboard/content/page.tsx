@@ -47,6 +47,7 @@ import {
 } from "@/lib/validation/content-shema";
 import { CategoriesResponse, Category } from "@/types/category-types";
 import { Content } from "@/types/content-types";
+import { Pagination } from "@/components/pagination";
 
 export default function ContentPage() {
   const [content, setContent] = useState<Content[]>([]);
@@ -59,6 +60,10 @@ export default function ContentPage() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [viewContent, setViewContent] = useState<Content | null>(null);
   const [openViewDialog, setOpenViewDialog] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const totalPages = Math.ceil(total / limit);
 
   useEffect(() => {
     fetchData();
@@ -70,6 +75,7 @@ export default function ContentPage() {
       const data = await contentService.contentService.getAll();
       const content = data?.responseObject?.content;
       setContent(content);
+      setTotal(data.responseObject.total);
 
       // mock data
       setTimeout(() => {
@@ -83,6 +89,15 @@ export default function ContentPage() {
     }
   };
 
+  const handlePageChange = async (newPage: number) => {
+    setPage(newPage);
+    setIsLoading(true);
+    const params: QueryParamsTypes = { page: newPage, limit };
+    const data: Content = await contentService.contentService.getAll(params);
+    setContent(data.responseObject.content);
+    setTotal(data.responseObject.total);
+    setIsLoading(false);
+  };
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -295,6 +310,12 @@ export default function ContentPage() {
           )}
         </CardContent>
       </Card>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       {/* View Content Dialog */}
       <Dialog open={openViewDialog} onOpenChange={setOpenViewDialog}>
