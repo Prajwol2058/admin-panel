@@ -50,7 +50,7 @@ const authService = {
             }
 
             const response = await axiosClient.post<RefreshTokenResponseTypes>(
-                "/auth/refresh",
+                "/auth/refresh-token",
                 { refreshToken },
                 // Skip the auth interceptor for this request to avoid infinite loop
                 { headers: { Authorization: "" } },

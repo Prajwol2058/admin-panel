@@ -3,7 +3,6 @@
 import { Edit, Eye, Loader2, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { mockCategories, mockContent } from "@/components/mockdata/mockdata";
 import { ContentModal } from "@/components/modal/contentModal";
 import {
   AlertDialog,
@@ -14,16 +13,12 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import {
+  Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -31,28 +26,32 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import {
+  Input,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { ContentFormValues } from "@/lib/validation/content-shema";
+} from "@/components";
+
+import categoryService from "@/lib/api/category-service";
+import contentService from "@/lib/api/content-services";
+import {
+  ContentFormValues,
+  ContentUpdateFormValues,
+} from "@/lib/validation/content-shema";
+import { CategoriesResponse, Category } from "@/types/category-types";
 import { Content } from "@/types/content-types";
+import { Pagination } from "@/components/pagination";
 
 export default function ContentPage() {
   const [content, setContent] = useState<Content[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [editContent, setEditContent] = useState<Content | null>(null);
@@ -61,81 +60,107 @@ export default function ContentPage() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [viewContent, setViewContent] = useState<Content | null>(null);
   const [openViewDialog, setOpenViewDialog] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const totalPages = Math.ceil(total / limit);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const contentData = await
-        // const categoriesData = await
-        // setContent(contentData);
-        // setCategories(categoriesData.map(c => c.name));
-
-        // mock data
-        setTimeout(() => {
-          setContent(mockContent);
-          setCategories(mockCategories.map((c) => c.name));
-          setIsLoading(false);
-        }, 1000);
-      } catch (error) {
-        console.log(error);
-
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const data = await contentService.contentService.getAll();
+      const content = data?.responseObject?.content;
+      setContent(content);
+      setTotal(data.responseObject.total);
+
+      // mock data
+      setTimeout(() => {
+        // setContent(mockContent);
+        setIsLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePageChange = async (newPage: number) => {
+    setPage(newPage);
+    setIsLoading(true);
+    const params: QueryParamsTypes = { page: newPage, limit };
+    const data: Content = await contentService.contentService.getAll(params);
+    setContent(data.responseObject.content);
+    setTotal(data.responseObject.total);
+    setIsLoading(false);
+  };
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      setIsLoading(true);
+      const data: CategoriesResponse = await categoryService.getAll();
+      setCategories(data.responseObject.categories);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Filter content based on search query
   const filteredContent = content.filter(
     (item) =>
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.category.toLowerCase().includes(searchQuery.toLowerCase())
+      item.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  // Generate slug from title
-  const generateSlug = (title: string) => {
-    return title
-      .toLowerCase()
-      .replace(/[^\w\s]/gi, "")
-      .replace(/\s+/g, "-");
-  };
 
   const handleCreateContent = async (
     values: ContentFormValues,
     { resetForm }: { resetForm: () => void }
   ) => {
     try {
-      // Simulate successful creation
-      const newId = Math.max(...content.map((c) => c.id), 0) + 1;
-      const newContent = {
-        id: newId,
-        ...values,
-        createdAt: new Date().toISOString().split("T")[0],
-      };
+      // Create FormData object
+      const formdata = new FormData();
 
-      setContent([...content, newContent]);
+      // Append form fields exactly as in your Postman example
+      formdata.append("author_id", values.author_id?.toString() || "1");
+      formdata.append("title", values.title);
+      formdata.append("subtitle", values.subtitle || "");
+      formdata.append("content", values.content);
+      formdata.append("category", values.category.toString());
+
+      // This is the critical part - append the file directly without a third parameter
+      if (values.photo instanceof File) {
+        formdata.append("photo", values.photo);
+      }
+      const response = await contentService.contentService.createFormData(
+        formdata
+      );
+      fetchData();
       resetForm();
       setOpenDialog(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   // Handle update content
   const handleUpdateContent = async (
-    values: ContentFormValues,
+    values: ContentUpdateFormValues,
     { resetForm }: { resetForm: () => void }
   ) => {
     if (!editContent) return;
 
     try {
-      // Simulate successful update
-      const updatedContent = content.map((item) =>
-        item.id === editContent.id ? { ...item, ...values } : item
+      const response = await contentService.contentService.update(
+        editContent?.id,
+        values
       );
-
-      setContent(updatedContent);
+      fetchData();
       resetForm();
       setEditContent(null);
       setOpenDialog(false);
@@ -144,14 +169,14 @@ export default function ContentPage() {
     }
   };
 
-  // Handle delete content
   const handleDeleteContent = async () => {
     if (deleteId === null) return;
 
     try {
-      setContent(content.filter((item) => item.id !== deleteId));
-      setDeleteId(null);
+      await contentService.contentService.delete(deleteId);
       setOpenDeleteDialog(false);
+      fetchData();
+      console.log(deleteId);
     } catch (error) {
       console.log(error);
     }
@@ -184,17 +209,14 @@ export default function ContentPage() {
                 Add Content
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[600px]">
-              <ContentModal
-                editContent={editContent}
-                handleUpdateContent={handleUpdateContent}
-                handleCreateContent={handleCreateContent}
-                generateSlug={generateSlug}
-                categories={categories}
-                setOpenDialog={setOpenDialog}
-                setEditContent={setEditContent}
-              />
-            </DialogContent>
+            <ContentModal
+              editContent={editContent}
+              handleUpdateContent={handleUpdateContent}
+              handleCreateContent={handleCreateContent}
+              categories={categories}
+              setOpenDialog={setOpenDialog}
+              setEditContent={setEditContent}
+            />
           </Dialog>
         </div>
       </div>
@@ -214,8 +236,10 @@ export default function ContentPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[170px]">Title</TableHead>
-                  <TableHead className="w-[150px]">Slug</TableHead>
-                  <TableHead className="w-[150px]">Category</TableHead>
+                  <TableHead className="w-[150px] ">Subtitle</TableHead>
+                  <TableHead className="w-[150px] text-center">
+                    Category
+                  </TableHead>
                   <TableHead className="w-[150px]">Created</TableHead>
                   <TableHead className="w-[80px]">Actions</TableHead>
                 </TableRow>
@@ -233,9 +257,11 @@ export default function ContentPage() {
                       <TableCell className="font-medium">
                         {item.title}
                       </TableCell>
-                      <TableCell>{item.slug}</TableCell>
-                      <TableCell>{item.category}</TableCell>
-                      <TableCell>{item.createdAt}</TableCell>
+                      <TableCell>{item.subtitle}</TableCell>
+                      <TableCell className="text-center">
+                        {item.category}
+                      </TableCell>
+                      <TableCell>{item.created_at}</TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -284,6 +310,12 @@ export default function ContentPage() {
           )}
         </CardContent>
       </Card>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       {/* View Content Dialog */}
       <Dialog open={openViewDialog} onOpenChange={setOpenViewDialog}>

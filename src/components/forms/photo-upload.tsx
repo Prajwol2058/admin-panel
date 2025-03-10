@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState, useRef, type ChangeEvent } from "react";
 import { Camera, Upload, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -9,14 +8,15 @@ import { Button } from "../ui";
 import Image from "next/image";
 
 interface PhotoUploadProps {
-  value: string;
-  onChange: (value: string) => void;
+  value: File | null;
+  onChange: (file: File | null) => void;
   className?: string;
 }
 
 export function PhotoUpload({ value, onChange, className }: PhotoUploadProps) {
   const [isHovering, setIsHovering] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,17 +34,15 @@ export function PhotoUpload({ value, onChange, className }: PhotoUploadProps) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result as string;
-      onChange(result);
-    };
-    reader.readAsDataURL(file);
+    // Generate preview
+    setPreview(URL.createObjectURL(file));
+    onChange(file);
   };
 
   const handleRemovePhoto = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onChange("");
+    onChange(null);
+    setPreview(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -64,9 +62,9 @@ export function PhotoUpload({ value, onChange, className }: PhotoUploadProps) {
             value ? "border-solid" : "border-dashed"
           )}
         >
-          {value ? (
+          {preview ? (
             <Image
-              src={value || "/placeholder.svg"}
+              src={preview}
               alt="Profile"
               className="h-full w-full object-cover"
               width={100}
