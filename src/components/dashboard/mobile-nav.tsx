@@ -2,11 +2,16 @@
 
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { NavLinks } from "@/components/dashboard/nav-links";
-import { UserNav } from "./user-nav";
-import { Button, Sheet, SheetContent, SheetTrigger } from "../ui";
+import { UserNav } from "@/components/dashboard/user-nav";
 
-export function MobileNav() {
+interface MobileNavProps {
+  userRole?: string;
+}
+
+export function MobileNav({ userRole = "USER" }: MobileNavProps) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -22,7 +27,7 @@ export function MobileNav() {
               href="/dashboard"
               className="flex items-center gap-2 font-semibold"
             >
-              Admin Dashboard
+              {userRole === "ADMIN" ? "Admin Dashboard" : "Content Dashboard"}
             </Link>
             <Sheet>
               <SheetTrigger asChild>
@@ -33,7 +38,7 @@ export function MobileNav() {
             </Sheet>
           </div>
           <div className="flex-1 overflow-auto py-4">
-            <NavLinks />
+            <NavLinks userRole={userRole} />
           </div>
           <div className="border-t p-4">
             <UserNav />
