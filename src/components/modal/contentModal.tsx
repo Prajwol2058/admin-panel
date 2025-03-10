@@ -30,6 +30,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { PhotoUpload } from "../forms";
 import contentServices from "@/lib/api/content-services";
 import { useEffect } from "react";
+import { useAuth } from "@/components/hooks/use-auth";
 
 type ContentFormValues = z.infer<typeof contentSchema>;
 
@@ -58,6 +59,9 @@ export const ContentModal = ({
   setOpenDialog: (open: boolean) => void;
   setEditContent: (content: Content | null) => void;
 }) => {
+  const { user } = useAuth();
+
+  const author_id = user?.id;
   const handleUpdatePhoto = async (photo: File) => {
     if (!editContent?.id) return;
     const formData = new FormData();
@@ -182,7 +186,8 @@ export const ContentModal = ({
                     id="author_id"
                     name="author_id"
                     type="number"
-                    placeholder="Enter author ID"
+                    value={editContent ? values.author_id : author_id || ""}
+                    readOnly={!editContent} // Make it read-only when adding content
                     className={
                       errors.author_id && touched.author_id
                         ? "border-destructive"
@@ -195,6 +200,7 @@ export const ContentModal = ({
                     className="text-sm text-destructive"
                   />
                 </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="category">Category</Label>
                   <Field name="category">

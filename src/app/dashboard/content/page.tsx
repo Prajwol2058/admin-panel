@@ -47,7 +47,6 @@ import {
 } from "@/lib/validation/content-shema";
 import { CategoriesResponse, Category } from "@/types/category-types";
 import { Content } from "@/types/content-types";
-import { useAuth } from "@/components/hooks/use-auth";
 
 export default function ContentPage() {
   const [content, setContent] = useState<Content[]>([]);
@@ -60,8 +59,6 @@ export default function ContentPage() {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [viewContent, setViewContent] = useState<Content | null>(null);
   const [openViewDialog, setOpenViewDialog] = useState(false);
-
-  console.log(useAuth.name, "user");
 
   useEffect(() => {
     fetchData();
@@ -142,8 +139,6 @@ export default function ContentPage() {
     { resetForm }: { resetForm: () => void }
   ) => {
     if (!editContent) return;
-
-    console.log(values, "values on edir");
 
     try {
       const response = await contentService.contentService.update(
