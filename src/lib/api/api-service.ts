@@ -1,3 +1,4 @@
+import { QueryParamsTypes } from "@/types/query-params"
 import { toast } from "sonner"
 import axiosClient from "../axios-client"
 
@@ -14,9 +15,14 @@ export class ApiService<T> {
     /**
      * Get all items
      */
-    async getAll(): Promise<T[]> {
+    async getAll(params: QueryParamsTypes): Promise<T[]> {
         try {
-            const response = await axiosClient.get<T[]>(this.endpoint)
+            const queryParams = {
+                ...params,
+            }
+
+
+            const response = await axiosClient.get<T[]>(this.endpoint, { params: queryParams })
             return response.data
         } catch (error) {
             this.handleError(error, "fetching")

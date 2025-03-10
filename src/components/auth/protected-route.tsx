@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../hooks/use-auth";
@@ -14,9 +14,8 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
-  const { isAuthenticated, isLoading } = useAuth();
-
-  console.log(isAuthenticated());
+  const pathname = usePathname();
+  const { user, isAuthenticated, isLoading } = useAuth();
 
   useEffect(() => {
     // If not loading and not authenticated, redirect to login
@@ -25,8 +24,27 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
         description: "Please log in to access this page",
       });
       router.push("/login");
+      return;
     }
-  }, [isLoading, isAuthenticated, router]);
+
+    // If authenticated but trying to access admin pages as a regular user
+    if (!isLoading && user && user.role !== "ADMIN") {
+      // List of admin-only paths
+      const adminPaths = ["/dashboard/categories", "/dashboard/content"];
+
+      // Check if current path is admin-only and not the content view page
+      const isAdminPath =
+        adminPaths.some((path) => pathname.startsWith(path)) &&
+        !pathname.includes("/dashboard/search-content");
+
+      if (isAdminPath) {
+        toast.error("Access denied", {
+          description: "You don't have permission to access this page",
+        });
+        router.push("/dashboard/content/view");
+      }
+    }
+  }, [isLoading, isAuthenticated, user, router, pathname]);
 
   if (isLoading) {
     return (
