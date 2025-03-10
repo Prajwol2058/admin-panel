@@ -40,6 +40,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components";
+import { Pagination } from "@/components/pagination";
 import categoryService from "@/lib/api/category-service";
 import {
   CategoryFormValues,
@@ -50,6 +51,7 @@ import {
   Category,
   EditCategoryTypes,
 } from "@/types/category-types";
+import { QueryParamsTypes } from "@/types/query-params";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -61,6 +63,10 @@ export default function CategoriesPage() {
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const totalPages = Math.ceil(total / limit);
 
   useEffect(() => {
     fetchCategories();
@@ -69,12 +75,25 @@ export default function CategoriesPage() {
   const fetchCategories = async () => {
     try {
       setIsLoading(true);
-      const data: CategoriesResponse = await categoryService.getAll();
+      const data: CategoriesResponse = await categoryService.getAll(
+        page,
+        limit
+      );
       setCategories(data.responseObject.categories);
+      setTotal(data.responseObject.total);
     } catch (error) {
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handlePageChange = async (newPage: number) => {
+    setPage(newPage);
+    const params: QueryParamsTypes = { page: newPage, limit };
+    const data: CategoriesResponse = await categoryService.getAll(params);
+    setCategories(data.responseObject.categories);
+    setTotal(data.responseObject.total);
   };
 
   // Handle create category
@@ -294,6 +313,12 @@ export default function CategoriesPage() {
           )}
         </CardContent>
       </Card>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
 
       <AlertDialog open={openDeleteDialog} onOpenChange={setOpenDeleteDialog}>
         <AlertDialogContent>
