@@ -51,6 +51,22 @@ export class ApiService<T> {
         }
     }
 
+    async createFormData(data: FormData): Promise<T> {
+        try {
+            const response = await axiosClient.post<T>(this.endpoint, data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            toast.success("Created successfully");
+            return response.data;
+        } catch (error) {
+            this.handleError(error, "creating");
+            throw error;
+        }
+    }
+    
+
     /**
      * Update existing item
      */
@@ -65,6 +81,23 @@ export class ApiService<T> {
         }
     }
 
+   /**
+     * Update existing item
+     */
+    async updatePhoto(id: number | string, data: Partial<T>): Promise<T> {
+        try {
+            const response = await axiosClient.put<T>(`${this.endpoint}/${id}`, data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            toast.success("Photo updated successfully")
+            return response.data
+        } catch (error) {
+            this.handleError(error, "updating photo")
+            throw error
+        }
+    }
     /**
      * Delete item
      */
