@@ -27,6 +27,11 @@ export const contentUpdateSchema = z.object({
     .max(300, "Subtitle cannot exceed 300 characters"),
   content: z.string().min(10, "Content must be at least 10 characters"),
   category: z.number().min(1, "Please select a category"),
+  photo: z.union([
+    z.instanceof(File),
+    z.string(),
+    z.null()
+  ]).optional(),
 })
 
 export type ContentUpdateFormValues = z.infer<typeof contentSchema>

@@ -15,14 +15,12 @@ export class ApiService<T> {
     /**
      * Get all items
      */
-    async getAll(params?: QueryParamsTypes): Promise<T[]> {
+    async getAll(params?: QueryParamsTypes): Promise<T> {
         try {
             const queryParams = {
                 ...params,
             }
-
-
-            const response = await axiosClient.get<T[]>(this.endpoint, { params: queryParams })
+            const response = await axiosClient.get<T>(this.endpoint, { params: queryParams })
             return response.data
         } catch (error) {
             this.handleError(error, "fetching")
@@ -90,20 +88,21 @@ export class ApiService<T> {
    /**
      * Update existing item
      */
-    async updatePhoto(id: number | string, data: Partial<T>): Promise<T> {
-        try {
-            const response = await axiosClient.put<T>(`${this.endpoint}/${id}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            toast.success("Photo updated successfully")
-            return response.data
-        } catch (error) {
-            this.handleError(error, "updating photo")
-            throw error
-        }
+   async updatePhoto(id: number | string, data: FormData): Promise<T> {
+    try {
+        const response = await axiosClient.put<T>(`${this.endpoint}/${id}`, data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
+        toast.success("Photo updated successfully");
+        return response.data;
+    } catch (error) {
+        this.handleError(error, "updating photo");
+        throw error;
     }
+}
+
     /**
      * Delete item
      */

@@ -75,10 +75,7 @@ export default function CategoriesPage() {
   const fetchCategories = async () => {
     try {
       setIsLoading(true);
-      const data: CategoriesResponse = await categoryService.getAll(
-        page,
-        limit
-      );
+      const data: CategoriesResponse = await categoryService.getAll();
       setCategories(data.responseObject.categories);
       setTotal(data.responseObject.total);
     } catch (error) {
@@ -90,10 +87,12 @@ export default function CategoriesPage() {
 
   const handlePageChange = async (newPage: number) => {
     setPage(newPage);
+    setIsLoading(true);
     const params: QueryParamsTypes = { page: newPage, limit };
     const data: CategoriesResponse = await categoryService.getAll(params);
     setCategories(data.responseObject.categories);
     setTotal(data.responseObject.total);
+    setIsLoading(false);
   };
 
   // Handle create category

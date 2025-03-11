@@ -1,10 +1,10 @@
-import { Content } from "@/types/content-types"
+import { Content, ContentResponse } from "@/types/content-types"
 import { ApiService } from "./api-service"
 
 
 
 // Create a base content service
-const contentService = new ApiService<Content>("/content")
+const contentService = new ApiService<ContentResponse>("/content")
 const contentServiceUpdate = new ApiService<Content>("/content/photo")
 
 

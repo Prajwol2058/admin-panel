@@ -39,7 +39,7 @@ export function RegisterForm() {
     confirm_password: "",
     gender: "MALE",
     role: "USER",
-    photo: "",
+    photo: null,
   };
 
   const handleSubmit = async (
@@ -47,7 +47,17 @@ export function RegisterForm() {
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     try {
-      register(values);
+      const formData = new FormData();
+      Object.entries(values).forEach(([key, value]) => {
+        if (key === "photo" && value instanceof File) {
+          formData.append(key, value);
+        } else {
+          formData.append(key, value as string);
+        }
+      });
+
+      await register(formData);
+
       setTimeout(() => {
         router.push("/login");
       }, 1000);
@@ -77,7 +87,7 @@ export function RegisterForm() {
               <div className="grid gap-6">
                 <div className="flex justify-center py-4">
                   <PhotoUpload
-                    value={values.photo || ""}
+                    value={values.photo || null}
                     onChange={(value) => setFieldValue("photo", value)}
                   />
                 </div>
