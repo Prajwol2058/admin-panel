@@ -2,14 +2,14 @@ import { AuthResponseTypes, LoginCredentialsTypes, RefreshTokenResponseTypes, Re
 import axiosClient from "../axios-client"
 
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 // Auth service
 const authService = {
     login: async (credentials: LoginCredentialsTypes): Promise<AuthResponseTypes> => {
         try {
             const response = await axiosClient.post<AuthResponseTypes>("/users/auth", credentials)
-
-            const data = response.responseObject
+            const data =response.data.responseObject
 
             // Store tokens in localStorage (only in browser environment)
             if (typeof window !== "undefined" && data.token && data.refreshToken) {
@@ -32,11 +32,20 @@ const authService = {
 
     register: async (data: RegisterDataTypes): Promise<AuthResponseTypes> => {
         try {
-            const response = await axiosClient.post<AuthResponseTypes>("/users/register", data)
-            return response
+           
+            const response = await fetch(`${API_BASE_URL}/users/register`, {
+                method: "POST",
+                body: data, 
+            });
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+    
+            return await response.json();
         } catch (error) {
-            console.error("Registration error:", error)
-            throw error
+            console.error("Registration error:", error);
+            throw error;
         }
     },
 
