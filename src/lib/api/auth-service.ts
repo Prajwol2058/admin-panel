@@ -61,7 +61,6 @@ const authService = {
             )
 
             const data = response.data.responseObject
-            const data = response.data.responseObject
 
             // Update tokens in localStorage
             if (data.token) {
