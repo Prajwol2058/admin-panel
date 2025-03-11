@@ -229,15 +229,15 @@ export default function ContentPage() {
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : (
-            <Table>
+            <Table className="table-fixed w-full">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[170px]">Title</TableHead>
-                  <TableHead className="w-[150px] ">Subtitle</TableHead>
-                  <TableHead className="w-[150px] text-center">
+                  <TableHead className="w-[250px]">Title</TableHead>
+                  <TableHead className="w-[250px]">Subtitle</TableHead>
+                  <TableHead className="w-[100px] text-center">
                     Category
                   </TableHead>
-                  <TableHead className="w-[150px]">Created</TableHead>
+                  <TableHead className="w-[100px]">Created At</TableHead>
                   <TableHead className="w-[80px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -251,14 +251,19 @@ export default function ContentPage() {
                 ) : (
                   filteredContent.map((item) => (
                     <TableRow key={item.id}>
-                      <TableCell className="font-medium">
+                      <TableCell className="truncate whitespace-nowrap overflow-hidden">
                         {item.title}
                       </TableCell>
-                      <TableCell>{item.subtitle}</TableCell>
-                      <TableCell className="text-center">
-                        {item.category}
+                      <TableCell className="truncate whitespace-nowrap overflow-hidden">
+                        {item.subtitle}
                       </TableCell>
-                      <TableCell>{item.created_at}</TableCell>
+
+                      <TableCell className="text-center truncate whitespace-nowrap overflow-hidden">
+                        {item.category.name}
+                      </TableCell>
+                      <TableCell className="truncate whitespace-nowrap overflow-hidden">
+                        {item.created_at}
+                      </TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -325,11 +330,13 @@ export default function ContentPage() {
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
                 Category:{" "}
-                <span className="font-medium">{viewContent?.category}</span>
+                <span className="font-medium">
+                  {viewContent?.category.name}
+                </span>
               </div>
               <div className="text-sm text-muted-foreground">
                 Author ID:{" "}
-                <span className="font-medium">{viewContent?.author_id}</span>
+                <span className="font-medium">{viewContent?.author.name}</span>
               </div>
             </div>
             <div className="rounded-md border p-4">
