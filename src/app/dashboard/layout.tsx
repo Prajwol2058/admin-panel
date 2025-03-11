@@ -16,6 +16,7 @@ export default function DashboardLayout({
 }) {
   const router = useRouter();
   const { user, isLoading } = useAuth();
+  const role = user?.role;
 
   // Redirect users to the appropriate dashboard based on their role
   useEffect(() => {
@@ -37,10 +38,12 @@ export default function DashboardLayout({
           <MobileNav userRole={user?.role} />
           <div className="flex-1">
             <Link
-              href="/dashboard"
+              href={
+                role === "ADMIN" ? "/dashboard" : "/dashboard/search-content"
+              }
               className="flex items-center gap-2 font-semibold"
             >
-              Admin Dashboard
+              {role === "ADMIN" ? "Admin Dashboard" : "Content Dashboard"}
             </Link>
           </div>
           <ThemeToggle />
@@ -51,10 +54,12 @@ export default function DashboardLayout({
           <div className="hidden border-r bg-muted/40 md:flex md:flex-col md:h-screen">
             <div className="h-16 flex items-center border-b px-4">
               <Link
-                href="/dashboard"
+                href={
+                  role === "ADMIN" ? "/dashboard" : "/dashboard/search-content"
+                }
                 className="flex items-center gap-2 font-semibold"
               >
-                Admin Dashboard
+                {role === "ADMIN" ? "Admin Dashboard" : "Content Dashboard"}
               </Link>
             </div>
             <div className="flex-1 overflow-auto p-4">
