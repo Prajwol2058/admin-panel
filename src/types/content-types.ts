@@ -1,12 +1,18 @@
 export interface Content {
   id: number;
   slug?: string;
-  author_id: number;
+  author: {
+    id: number;
+    name: string;
+  };
   title: string;
   photo: string | null; 
   subtitle: string;
   content: string;
-  category: number; 
+  category: {
+    id: number;
+    name: string;
+  }; 
   size: number;
   width: number;
   height: number;
