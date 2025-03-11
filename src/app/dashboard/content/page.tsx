@@ -110,7 +110,7 @@ export default function ContentPage() {
     }
   };
 
-  // Filter content based on search query
+  // Filter content based on the search query
   const filteredContent = content.filter(
     (item) =>
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
