@@ -17,7 +17,7 @@ export default function ContentViewModeSelector({
   totalCount,
 }: ContentViewModeSelectorProps) {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center w-full">
       <div className="text-sm text-muted-foreground">
         {contentCount > 0 ? (
           <span>
@@ -26,7 +26,7 @@ export default function ContentViewModeSelector({
         ) : null}
       </div>
       <div>
-        <div className="bg-secondary rounded-md">
+        <div className="bg-secondary rounded-md w-full flex">
           <Button
             variant={viewMode === "grid" ? "default" : "ghost"}
             size="sm"
