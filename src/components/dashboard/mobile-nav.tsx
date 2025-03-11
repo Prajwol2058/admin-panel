@@ -29,13 +29,6 @@ export function MobileNav({ userRole = "USER" }: MobileNavProps) {
             >
               {userRole === "ADMIN" ? "Admin Dashboard" : "Content Dashboard"}
             </Link>
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <X className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-            </Sheet>
           </div>
           <div className="flex-1 overflow-auto py-4">
             <NavLinks userRole={userRole} />
