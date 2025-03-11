@@ -1,5 +1,5 @@
 import { AuthResponseTypes, LoginCredentialsTypes, RefreshTokenResponseTypes, RegisterDataTypes } from "@/types/auth-types"
-import axiosClient from "../api-client"
+import axiosClient from "../axios-client"
 
 
 

@@ -46,8 +46,9 @@ import {
   ContentUpdateFormValues,
 } from "@/lib/validation/content-shema";
 import { CategoriesResponse, Category } from "@/types/category-types";
-import { Content } from "@/types/content-types";
+import { Content, ContentResponse } from "@/types/content-types";
 import { Pagination } from "@/components/pagination";
+import { QueryParamsTypes } from "@/types/query-params";
 
 export default function ContentPage() {
   const [content, setContent] = useState<Content[]>([]);
@@ -73,15 +74,9 @@ export default function ContentPage() {
     try {
       setIsLoading(true);
       const data = await contentService.contentService.getAll();
-      const content = data?.responseObject?.content;
+      const content = data.responseObject.content;
       setContent(content);
       setTotal(data.responseObject.total);
-
-      // mock data
-      setTimeout(() => {
-        // setContent(mockContent);
-        setIsLoading(false);
-      }, 1000);
     } catch (error) {
       console.log(error);
     } finally {
@@ -93,7 +88,9 @@ export default function ContentPage() {
     setPage(newPage);
     setIsLoading(true);
     const params: QueryParamsTypes = { page: newPage, limit };
-    const data: Content = await contentService.contentService.getAll(params);
+    const data: ContentResponse = await contentService.contentService.getAll(
+      params
+    );
     setContent(data.responseObject.content);
     setTotal(data.responseObject.total);
     setIsLoading(false);

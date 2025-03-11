@@ -14,7 +14,7 @@ export const registerSchema = z
         name: z.string().min(2, "Name must be at least 2 characters").max(50, "Name cannot exceed 50 characters"),
         username: z.string().min(2, "Username must be at least 2 characters").max(50, "Username cannot exceed 50 characters"),
         email: z.string().email("Please enter a valid email address"),
-        photo: z.string().optional(),
+        photo: z.instanceof(File, { message: "Photo must be a file" }),
         password: z
             .string()
             .min(6, "Password must be at least 6 characters")

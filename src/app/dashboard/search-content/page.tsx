@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import categoryService from "@/lib/api/category-service";
-import contentService from "@/lib/api/content-service";
+import contentServices from "@/lib/api/content-services";
 import { CategoriesResponse, Category } from "@/types/category-types";
 import { Content } from "@/types/content-types";
 import {
@@ -127,7 +127,9 @@ const ContentViewPage = () => {
         cleanParams.limit = limit;
 
         // Fetch content with search parameters
-        const response = await contentService.getAll(cleanParams);
+        const response = await contentServices.contentService.getAll(
+          cleanParams
+        );
 
         // Set content and totalCount from the API response
         setContent(response.responseObject.content);
