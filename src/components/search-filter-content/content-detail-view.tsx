@@ -35,12 +35,12 @@ export default function ContentDetailView({
           Back to List
         </Button>
 
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
           <Button variant="outline" size="sm">
             <Share2 className="mr-2 h-4 w-4" />
             Share
           </Button>
-        </div>
+        </div> */}
       </div>
 
       {/* Main content */}
