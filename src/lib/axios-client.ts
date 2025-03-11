@@ -65,7 +65,7 @@ axiosClient.interceptors.response.use(
 
         // Don't retry auth endpoints
         const url = originalRequest.url || ""
-        if (url.includes("/auth/login") || url.includes("/auth/refresh")) {
+        if (url.includes("/users/auth") || url.includes("/login/refresh-token")) {
             if (typeof window !== "undefined") {
                 authService.logout()
                 window.location.href = "/login"
@@ -83,7 +83,7 @@ axiosClient.interceptors.response.use(
             try {
                 // Try to refresh the token
                 const response = await authService.refreshToken()
-                const newToken = response.accessToken
+                const newToken = response.responseObject.token
 
                 isRefreshing = false
                 processQueue(null, newToken)

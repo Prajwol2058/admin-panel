@@ -9,7 +9,7 @@ const authService = {
     login: async (credentials: LoginCredentialsTypes): Promise<AuthResponseTypes> => {
         try {
             const response = await axiosClient.post<AuthResponseTypes>("/users/auth", credentials)
-            const data =response.data.responseObject
+            const data = response.data.responseObject
 
             // Store tokens in localStorage (only in browser environment)
             if (typeof window !== "undefined" && data.token && data.refreshToken) {
@@ -32,16 +32,16 @@ const authService = {
 
     register: async (data: RegisterDataTypes): Promise<AuthResponseTypes> => {
         try {
-           
+
             const response = await fetch(`${API_BASE_URL}/users/register`, {
                 method: "POST",
-                body: data, 
+                body: data,
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-    
+
             return await response.json();
         } catch (error) {
             console.error("Registration error:", error);
@@ -64,7 +64,7 @@ const authService = {
                 { headers: { Authorization: "" } },
             )
 
-            const data = response.responseObject
+            const data = response.data.responseObject
 
             // Update tokens in localStorage
             if (data.token) {
@@ -82,7 +82,7 @@ const authService = {
         } catch (error) {
             console.error("Token refresh error:", error)
             // If refresh fails, clear auth data
-            authService.logout()
+            // authService.logout()
             throw error
         }
     },
