@@ -1,4 +1,4 @@
-import { AuthResponseTypes, LoginCredentialsTypes, RefreshTokenResponseTypes, RegisterDataTypes } from "@/types/auth-types"
+import { ApiResponse, AuthResponseTypes, LoginCredentialsTypes, RefreshTokenResponseTypes, RegisterDataTypes } from "@/types/auth-types"
 import axiosClient from "../axios-client"
 
 
@@ -8,25 +8,21 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 const authService = {
     login: async (credentials: LoginCredentialsTypes): Promise<AuthResponseTypes> => {
         try {
-            const response = await axiosClient.post<AuthResponseTypes>("/users/auth", credentials)
-            const data =response.data.responseObject
-
+            const response = await axiosClient.post<ApiResponse<AuthResponseTypes>>("/users/auth", credentials);
+            const data = response.data.responseObject;
+            
             // Store tokens in localStorage (only in browser environment)
             if (typeof window !== "undefined" && data.token && data.refreshToken) {
                 // Store tokens
-                localStorage.setItem("access_token", data.token)
-                localStorage.setItem("refresh_token", data.refreshToken)
-
+                localStorage.setItem("access_token", data.token);
+                localStorage.setItem("refresh_token", data.refreshToken);
                 // Store user data
-                localStorage.setItem("user", JSON.stringify(data.users))
-
-
+                localStorage.setItem("user", JSON.stringify(data.users));
             }
-
-            return data
+            return data;
         } catch (error) {
-            console.error("Login error:", error)
-            throw error
+            console.error("Login error:", error);
+            throw error;
         }
     },
 
@@ -64,7 +60,7 @@ const authService = {
                 { headers: { Authorization: "" } },
             )
 
-            const data = response.responseObject
+            const data = response.data.responseObject
 
             // Update tokens in localStorage
             if (data.token) {
@@ -82,7 +78,7 @@ const authService = {
         } catch (error) {
             console.error("Token refresh error:", error)
             // If refresh fails, clear auth data
-            authService.logout()
+            authService.logout()    
             throw error
         }
     },
