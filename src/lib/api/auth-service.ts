@@ -8,7 +8,6 @@ const authService = {
     login: async (credentials: LoginCredentialsTypes): Promise<AuthResponseTypes> => {
         try {
             const response = await axiosClient.post<AuthResponseTypes>("/users/auth", credentials)
-            console.log(response.responseObject, "response");
 
             const data = response.responseObject
 
@@ -50,17 +49,17 @@ const authService = {
             }
 
             const response = await axiosClient.post<RefreshTokenResponseTypes>(
-                "/auth/refresh-token",
+                "/login/refresh-token",
                 { refreshToken },
                 // Skip the auth interceptor for this request to avoid infinite loop
                 { headers: { Authorization: "" } },
             )
 
-            const data = response
+            const data = response.responseObject
 
             // Update tokens in localStorage
-            if (data.accessToken) {
-                localStorage.setItem("access_token", data.accessToken)
+            if (data.token) {
+                localStorage.setItem("access_token", data.token)
 
                 // Update refresh token if a new one is provided
                 if (data.refreshToken) {

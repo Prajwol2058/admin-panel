@@ -45,9 +45,10 @@ export function useAuth() {
         try {
             // Use the auth service to login
             const response = await authService.login(credentials)
+            console.log(response, "response");
 
-            setUser(response.responseObject.users)
 
+            setUser(response?.users)
             toast.success("Login successful", {
                 description: "Redirecting to dashboard...",
             })
