@@ -46,7 +46,7 @@ export const ContentModal = ({
   handleUpdateContent: (
     values: ContentUpdateFormValues,
     formikHelpers: {
-      resetForm: (nextValues?: Partial<ContentUpdateFormValues>) => void;
+      resetForm: (nextValues?: ContentUpdateFormValues) => void;
     }
   ) => void;
   handleCreateContent: (
@@ -92,11 +92,11 @@ export const ContentModal = ({
       <Formik
         initialValues={{
           id: editContent?.id,
-          author_id: editContent?.author_id || 1,
+          author_id: editContent?.author.id || 1,
           title: editContent?.title || "",
           subtitle: editContent?.subtitle || "",
           content: editContent?.content || "",
-          category: editContent?.category || 0,
+          category: editContent?.category.id || 0,
           photo: editContent?.photo || null,
         }}
         // validationSchema={toFormikValidationSchema(contentSchema)}

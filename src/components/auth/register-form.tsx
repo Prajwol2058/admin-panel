@@ -48,11 +48,18 @@ export function RegisterForm() {
   ) => {
     try {
       const formData = new FormData();
-      Object.entries(values).forEach(([key, value]) => {
+
+      // Append all initial values to formData
+      Object.entries(initialValues).forEach(([key, defaultValue]) => {
+        const value = values[key as keyof RegisterFormValues];
+
         if (key === "photo" && value instanceof File) {
           formData.append(key, value);
         } else {
-          formData.append(key, value as string);
+          formData.append(
+            key,
+            value ? value.toString() : defaultValue.toString()
+          );
         }
       });
 

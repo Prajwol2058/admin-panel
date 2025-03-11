@@ -41,7 +41,7 @@ export default function ContentGridView({
                     : URL.createObjectURL(item.photo)
                 }
                 alt={item.title}
-                className="h-full w-full object-cover transition-all hover:scale-105 duration-300"
+                className="h-full w-full object-fill transition-all hover:scale-105 duration-300"
               />
             </div>
           )}
@@ -54,9 +54,9 @@ export default function ContentGridView({
           <CardContent className="pb-2">
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground mb-3">
               <Badge variant="secondary" className="font-normal">
-                {typeof item.category === "number"
-                  ? getCategoryName(item.category)
-                  : item.category}
+                {typeof item.category.id === "number"
+                  ? getCategoryName(item.category.name)
+                  : item.category.name}
               </Badge>
               <div className="flex items-center gap-1">
                 <Calendar className="h-3 w-3" />

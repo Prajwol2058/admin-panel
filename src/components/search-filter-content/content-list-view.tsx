@@ -35,7 +35,7 @@ export default function ContentListView({
                       : URL.createObjectURL(item.photo)
                   }
                   alt={item.title}
-                  className="h-full w-full object-cover transition-all hover:scale-105 duration-300"
+                  className="h-full w-full object-contain transition-all hover:scale-105 duration-300"
                 />
               </div>
             )}
@@ -47,18 +47,18 @@ export default function ContentListView({
 
               <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground my-2">
                 <Badge variant="secondary" className="font-normal">
-                  {typeof item.category === "number"
-                    ? getCategoryName(item.category)
-                    : item.category}
+                  {typeof item.category.id === "number"
+                    ? getCategoryName(item.category.name)
+                    : item.category.name}
                 </Badge>
                 <div className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
                   <span>{formatDate(item.created_at)}</span>
                 </div>
-                {item.author_id && (
+                {item.author.id && (
                   <div className="flex items-center gap-1">
                     <User className="h-3 w-3" />
-                    <span>ID: {item.author_id}</span>
+                    <span>ID: {item.author.id}</span>
                   </div>
                 )}
                 {item.size && (

@@ -53,9 +53,9 @@ export default function ContentDetailView({
           {/* Metadata */}
           <div className="flex flex-wrap items-center gap-3 mt-4 text-sm">
             <Badge variant="secondary" className="font-normal">
-              {typeof content.category === "number"
-                ? getCategoryName(content.category)
-                : content.category}
+              {typeof content.category.id === "number"
+                ? getCategoryName(content.category.name)
+                : content.category.name}
             </Badge>
 
             <div className="flex items-center gap-1 text-muted-foreground">
@@ -63,10 +63,12 @@ export default function ContentDetailView({
               <span>{formatDate(content.created_at)}</span>
             </div>
 
-            {content.author_id && (
+            {content.author.id && (
               <div className="flex items-center gap-1 text-muted-foreground">
                 <User className="h-4 w-4" />
-                <span>Author ID: {content.author_id}</span>
+                <span>
+                  Author ID:{content.author.name} ({content.author.id})
+                </span>
               </div>
             )}
           </div>
