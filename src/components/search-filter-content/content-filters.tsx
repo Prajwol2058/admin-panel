@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Search, X } from "lucide-react";
 import type { Category } from "@/types/category-types";
+import { toast } from "sonner";
 
 interface ContentFiltersProps {
   currentSearchParams: any;
@@ -138,7 +139,6 @@ export default function ContentFilters({
               }
             />
           </div>
-
           {/* Size Range */}
           <div className="space-y-2">
             <Label>Size Range (KB)</Label>
@@ -176,7 +176,23 @@ export default function ContentFilters({
         <Button variant="outline" onClick={resetFilters}>
           Reset
         </Button>
-        <Button onClick={applySearch}>
+        <Button
+          onClick={() => {
+            // Prevent submitting if one of the date or size ranges is incomplete
+            if (
+              (currentSearchParams.size_from && !currentSearchParams.size_to) ||
+              (!currentSearchParams.size_from && currentSearchParams.size_to) ||
+              (currentSearchParams.created_at_from &&
+                !currentSearchParams.created_at_to) ||
+              (!currentSearchParams.created_at_from &&
+                currentSearchParams.created_at_to)
+            ) {
+              toast("Please complete both range fields for size or date.");
+              return;
+            }
+            applySearch();
+          }}
+        >
           <Search className="mr-2 h-4 w-4" />
           Apply Filters
         </Button>
