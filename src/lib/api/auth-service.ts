@@ -28,16 +28,16 @@ const authService = {
 
     register: async (data: RegisterDataTypes): Promise<AuthResponseTypes> => {
         try {
-           
+
             const response = await fetch(`${API_BASE_URL}/users/register`, {
                 method: "POST",
-                body: data, 
+                body: data,
             });
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
-    
+
             return await response.json();
         } catch (error) {
             console.error("Registration error:", error);
@@ -60,6 +60,7 @@ const authService = {
                 { headers: { Authorization: "" } },
             )
 
+            const data = response.data.responseObject
             const data = response.data.responseObject
 
             // Update tokens in localStorage
