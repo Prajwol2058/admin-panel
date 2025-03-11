@@ -8,13 +8,18 @@ export function UserNav() {
   const { user, logout } = useAuth();
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between w-full">
       <div className="flex items-center gap-2">
         <User className="h-4 w-4" />
         <span className="text-sm font-medium">{user?.name}</span>
       </div>
-      <Button variant="ghost" size="icon" onClick={logout}>
-        <LogOut className="h-4 w-4" />
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={logout}
+        className="hover:cursor-pointer"
+      >
+        <LogOut className="h-4 w-4 " />
         <span className="sr-only">Log out</span>
       </Button>
     </div>
