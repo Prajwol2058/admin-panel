@@ -125,7 +125,7 @@ export default function ContentFilters({
               value={currentSearchParams.author?.toString() || ""}
               onValueChange={(value) =>
                 handleInputChange(
-                  "author",
+                  "author_id",
                   value === "all" ? undefined : Number.parseInt(value)
                 )
               }
