@@ -78,6 +78,7 @@ export default function CategoriesPage() {
       const data: CategoriesResponse = await categoryService.getAll();
       setCategories(data.responseObject.categories);
       setTotal(data.responseObject.total);
+      setPage(data.responseObject.page);
     } catch (error) {
       console.log(error);
     } finally {
@@ -152,12 +153,12 @@ export default function CategoriesPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Input
+          {/* <Input
             placeholder="Search categories..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="max-w-xs"
-          />
+          /> */}
           <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>
               <Button
