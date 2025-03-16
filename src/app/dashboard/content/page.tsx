@@ -77,6 +77,7 @@ export default function ContentPage() {
       const content = data.responseObject.content;
       setContent(content);
       setTotal(data.responseObject.total);
+      setPage(data.responseObject.page);
     } catch (error) {
       console.log(error);
     } finally {
@@ -189,12 +190,12 @@ export default function ContentPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Input
+                   {/* <Input
             placeholder="Search content..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="max-w-xs"
-          />
+          /> */}
           <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>
               <Button

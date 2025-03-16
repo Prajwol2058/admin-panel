@@ -18,9 +18,12 @@ import { Pagination } from "@/components/pagination";
 import { QueryParamsTypes } from "@/types/query-params";
 import contentService from "@/lib/api/content-services";
 import categoryService from "@/lib/api/category-service";
+import authorServices from "@/lib/api/author-services";
+
 export default function ContentViewPage() {
   const [content, setContent] = useState<Content[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [authors, setAuthors] = useState<[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedContent, setSelectedContent] = useState<Content | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -79,6 +82,26 @@ export default function ContentViewPage() {
 
     fetchCategories();
   }, []);
+
+
+    // Fetch authors on component mount
+    useEffect(() => {
+      const fetchAdmins = async () => {
+        try {
+          const data = await authorServices.getAll();
+  
+          setAuthors(data.responseObject.admins);
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+          toast.error("Error", {
+            description: "Failed to fetch categories",
+          });
+          setAuthors([]);
+        }
+      };
+  
+      fetchAdmins();
+    }, []);
 
   // Fetch content with search parameters
   useEffect(() => {
@@ -265,6 +288,8 @@ export default function ContentViewPage() {
                 resetFilters={resetFilters}
                 applySearch={applySearch}
                 categories={categories}
+                authors={authors}
+
               />
             </CollapsibleContent>
           </Collapsible>

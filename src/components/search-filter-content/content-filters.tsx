@@ -27,6 +27,7 @@ interface ContentFiltersProps {
   resetFilters: () => void;
   applySearch: () => void;
   categories: Category[];
+  authors: any[];
 }
 
 export default function ContentFilters({
@@ -35,7 +36,10 @@ export default function ContentFilters({
   resetFilters,
   applySearch,
   categories,
+  authors,
 }: ContentFiltersProps) {
+  console.log(authors, "authors");
+
   return (
     <Card>
       <CardHeader>
@@ -81,7 +85,7 @@ export default function ContentFilters({
                 )
               }
             >
-              <SelectTrigger id="category">
+              <SelectTrigger id="category" className="w-full">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
@@ -100,7 +104,7 @@ export default function ContentFilters({
           </div>
 
           {/* Author ID */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label htmlFor="author_id">Author ID</Label>
             <Input
               id="author_id"
@@ -114,6 +118,31 @@ export default function ContentFilters({
                 )
               }
             />
+          </div> */}
+          <div className="space-y-2">
+            <Label htmlFor="author">Author</Label>
+            <Select
+              value={currentSearchParams.author?.toString() || ""}
+              onValueChange={(value) =>
+                handleInputChange(
+                  "author",
+                  value === "all" ? undefined : Number.parseInt(value)
+                )
+              }
+            >
+              <SelectTrigger id="author" className="w-full">
+                <SelectValue placeholder="Select author" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Authors</SelectItem>
+                {Array.isArray(authors) &&
+                  authors.map((author) => (
+                    <SelectItem key={author.id} value={author.id.toString()}>
+                      {author.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Date Range */}
